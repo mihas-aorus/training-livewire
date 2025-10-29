@@ -102,7 +102,7 @@ class Index extends Component
         $user->nama                     = $this->nama;
         $user->email                    = $this->email;
         $user->role                     = $this->role;
-        if ($this->password) {
+        if (filled($this->password)) {
             $user->password             = Hash::make($this->password);
         }
 
