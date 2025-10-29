@@ -64,36 +64,4 @@ class Index extends Component
 
         $this->dispatch('closeCreateModal');
     }
-
-    public function edit($id)
-    {
-        $user = User::findOrFail($id);
-        $this->nama     = $user->nama;
-        $this->email    = $user->email;
-        $this->role     = $user->role;
-        $this->user_id  = $user->id;
-    }
-
-    public function update($id)
-    {
-        $user = User::findOrFail($id);
-
-        $this->validate([
-            'nama'                      => 'required',
-            'email'                     => 'required|email',
-            'role'                      => 'required',
-            'password'                  => 'nullable|min:8|confirmed',
-            'password_confirmation'     => 'required',
-        ],
-    [
-        'nama.required'                     => 'Nama wajib diisi.',
-        'email.required'                    => 'Email wajib diisi.',
-        'email.email'                       => 'Email tidak sah.',
-        'role.required'                     => 'Role wajib diisi.',
-        'password.required'                 => 'Kata Laluan wajib diisi.',
-        'password.min'                      => 'Kata Laluan tidak boleh kurang daripada 8 aksara.',
-        'password.confirmed'                => 'Pengesahan Kata Laluan tidak sepadan.',
-        'password_confirmation.required'    => 'Pengesahan Kata Laluan wajib diisi.',
-        ]);
-    }
 }
