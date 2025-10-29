@@ -3,6 +3,7 @@
 namespace App\Livewire\Superadmin\User;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,14 +13,56 @@ class Index extends Component
     protected $paginationTheme = 'bootstrap';
     public $paginate = '10';
     public $search = '';
+
+    public $nama, $email, $role, $password, $password_confirmation;
     public function render()
     {
         $data = array(
+            'title' => 'Data User',
             'user' => User::where('nama', 'like', '%'.$this->search.'%')
             ->orWhere('email', 'like', '%'.$this->search.'%')
             ->orderBy('role', 'asc')->paginate($this->paginate),
         );
 
         return view('livewire.superadmin.user.index', $data);
+    }
+
+    public function create()
+    {
+        $this->resetValidation();
+
+        $this->reset([
+            'nama', 'email', 'role', 'password', 'password_confirmation',
+        ]);
+    }
+
+    public function store()
+    {
+        $this->validate([
+            'nama'                      => 'required',
+            'email'                     => 'required|email',
+            'role'                      => 'required',
+            'password'                  => 'required|min:8|confirmed',
+            'password_confirmation'     => 'required',
+        ],
+    [
+        'nama.required'                     => 'Nama wajib diisi.',
+        'email.required'                    => 'Email wajib diisi.',
+        'email.email'                       => 'Email tidak sah.',
+        'role.required'                     => 'Role wajib diisi.',
+        'password.required'                 => 'Kata Laluan wajib diisi.',
+        'password.min'                      => 'Kata Laluan tidak boleh kurang daripada 8 aksara.',
+        'password.confirmed'                => 'Pengeshan Kata Laluan tidak sepadan.',
+        'password_confirmation.required'    => 'Pengesahan Kata Laluan wajib diisi.',
+        ]);
+
+        $user = new User;
+        $user->nama                     = $this->nama;
+        $user->email                    = $this->email;
+        $user->role                     = $this->role;
+        $user->password                 = Hash::make($this->password);
+        $user->save();
+
+        $this->dispatch('closeCreateModal');
     }
 }
