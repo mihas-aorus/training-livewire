@@ -70,10 +70,12 @@ class Index extends Component
         $this->resetValidation();
 
         $user = User::findOrFail($id);
-        $this->nama     = $user->nama;
-        $this->email    = $user->email;
-        $this->role     = $user->role;
-        $this->user_id  = $user->id;
+        $this->nama                     = $user->nama;
+        $this->email                    = $user->email;
+        $this->role                     = $user->role;
+        $this->password                 = '';
+        $this->password_confirmation    = '';
+        $this->user_id                  = $user->id;
     }
 
     public function update($id)
