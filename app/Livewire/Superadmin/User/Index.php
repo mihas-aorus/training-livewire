@@ -14,7 +14,7 @@ class Index extends Component
     public $paginate = '10';
     public $search = '';
 
-    public $nama, $email, $role, $password, $password_confirmation;
+    public $nama, $email, $role, $password, $password_confirmation, $user_id;
     public function render()
     {
         $data = array(
@@ -40,20 +40,19 @@ class Index extends Component
     {
         $this->validate([
             'nama'                      => 'required',
-            'email'                     => 'required|email',
+            'email'                     => 'required|email|unique:users,email',
             'role'                      => 'required',
             'password'                  => 'required|min:8|confirmed',
-            'password_confirmation'     => 'required',
         ],
     [
         'nama.required'                     => 'Nama wajib diisi.',
         'email.required'                    => 'Email wajib diisi.',
         'email.email'                       => 'Email tidak sah.',
+        'email.unique'                      => 'Email sudah terdaftar.',
         'role.required'                     => 'Role wajib diisi.',
         'password.required'                 => 'Kata Laluan wajib diisi.',
         'password.min'                      => 'Kata Laluan tidak boleh kurang daripada 8 aksara.',
-        'password.confirmed'                => 'Pengeshan Kata Laluan tidak sepadan.',
-        'password_confirmation.required'    => 'Pengesahan Kata Laluan wajib diisi.',
+        'password.confirmed'                => 'Pengesahan Kata Laluan tidak sepadan.',
         ]);
 
         $user = new User;
@@ -64,5 +63,49 @@ class Index extends Component
         $user->save();
 
         $this->dispatch('closeCreateModal');
+    }
+
+    public function edit($id)
+    {
+        $this->resetValidation();
+
+        $user = User::findOrFail($id);
+        $this->nama     = $user->nama;
+        $this->email    = $user->email;
+        $this->role     = $user->role;
+        $this->user_id  = $user->id;
+    }
+
+    public function update($id)
+    {
+        $user = User::findOrFail($id);
+
+        $this->validate([
+            'nama'                      => 'required',
+            'email'                     => 'required|email|unique:users,email,'.$id,
+            'role'                      => 'required',
+            'password'                  => 'nullable|min:8|confirmed',
+        ],
+    [
+        'nama.required'                     => 'Nama wajib diisi.',
+        'email.required'                    => 'Email wajib diisi.',
+        'email.email'                       => 'Email tidak sah.',
+        'email.unique'                      => 'Email sudah terdaftar.',
+        'role.required'                     => 'Role wajib diisi.',
+        'password.required'                 => 'Kata Laluan wajib diisi.',
+        'password.min'                      => 'Kata Laluan tidak boleh kurang daripada 8 aksara.',
+        'password.confirmed'                => 'Pengesahan Kata Laluan tidak sepadan.',
+        ]);
+
+        $user->nama                     = $this->nama;
+        $user->email                    = $this->email;
+        $user->role                     = $this->role;
+        if ($this->password) {
+            $user->password             = Hash::make($this->password);
+        }
+
+        $user->save();
+
+        $this->dispatch('closeEditModal');
     }
 }

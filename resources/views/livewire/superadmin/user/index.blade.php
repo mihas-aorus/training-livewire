@@ -104,7 +104,7 @@
                                     <button class="btn btn-sm btn-info">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-warning">
+                                    <button wire:click="edit({{ $item->id }})" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editModal">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="btn btn-sm btn-danger">
@@ -142,6 +142,23 @@
         </script>
         @endscript
         {{-- Close Create Modal --}}
+        {{-- Edit Modal --}}
+        @include('livewire.superadmin.user.edit')
+        {{-- Edit Modal --}}
+        {{-- Close Edit Modal --}}
+        @script
+        <script>
+            $wire.on('closeEditModal', () => {
+                $('#editModal').modal('hide');
+                Swal.fire({
+                title: "Update Data User Berjaya",
+                text: "Rekod User berjaya disimpan.",
+                icon: "success"
+                });
+            });
+        </script>
+        @endscript
+        {{-- Close Edit Modal --}}
     </div>
   <!-- /.content-wrapper -->
 
