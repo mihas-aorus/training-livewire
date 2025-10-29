@@ -9,7 +9,7 @@
                 <div class="col-sm-6">
                     <h1>
                         <i class="fas fa-user mr-2"></i>
-                        @yield('title')
+                        {{ $title }}
                     </h1>
                 </div>
                 <div class="col-sm-6">
@@ -22,7 +22,7 @@
                         </li>
                         <li class="breadcrumb-item active">
                             <i class="fas fa-user mr-1"></i>
-                            @yield('title')
+                            {{ $title }}
                         </li>
                     </ol>
                 </div>
@@ -38,7 +38,7 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <button class="btn btn-sm btn-primary">
+                        <button wire:click="create" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#createModal">
                             <i class="fas fa-plus mr-1"></i>
                             Tambah Data
                         </button>
@@ -124,6 +124,24 @@
 
         </section>
         <!-- /.content -->
+
+        {{-- Create Modal --}}
+        @include('livewire.superadmin.user.create')
+        {{-- Create Modal --}}
+        {{-- Close Create Modal --}}
+        @script
+        <script>
+            $wire.on('closeCreateModal', () => {
+                $('#createModal').modal('hide');
+                Swal.fire({
+                title: "Tambah Data User Berjaya",
+                text: "Rekod User berjaya disimpan.",
+                icon: "success"
+                });
+            });
+        </script>
+        @endscript
+        {{-- Close Create Modal --}}
     </div>
   <!-- /.content-wrapper -->
 
