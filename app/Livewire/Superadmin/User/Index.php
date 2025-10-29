@@ -110,4 +110,21 @@ class Index extends Component
 
         $this->dispatch('closeEditModal');
     }
+
+    public function confirm($id)
+    {
+        $user = User::findOrFail($id);
+        $this->nama = $user->nama;
+        $this->email = $user->email;
+        $this->role = $user->role;
+
+        $this->user_id = $user->id;
+    }
+
+    public function destroy($id)
+    {
+        User::findOrFail($id)->delete();
+
+        $this->dispatch('closeDeleteModal');
+    }
 }

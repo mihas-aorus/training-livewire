@@ -107,7 +107,7 @@
                                     <button wire:click="edit({{ $item->id }})" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editModal">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger">
+                                    <button wire:click="confirm({{ $item->id }})" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
@@ -142,6 +142,7 @@
         </script>
         @endscript
         {{-- Close Create Modal --}}
+
         {{-- Edit Modal --}}
         @include('livewire.superadmin.user.edit')
         {{-- Edit Modal --}}
@@ -159,6 +160,24 @@
         </script>
         @endscript
         {{-- Close Edit Modal --}}
+
+        {{-- Delete Modal --}}
+        @include('livewire.superadmin.user.delete')
+        {{-- Delete Modal --}}
+        {{-- Close Delete Modal --}}
+        @script
+        <script>
+            $wire.on('closeDeleteModal', () => {
+                $('#deleteModal').modal('hide');
+                Swal.fire({
+                title: "Hapus Data User Berjaya",
+                text: "Rekod User berjaya dihapus.",
+                icon: "success"
+                });
+            });
+        </script>
+        @endscript
+        {{-- Close Delete Modal --}}
     </div>
   <!-- /.content-wrapper -->
 
